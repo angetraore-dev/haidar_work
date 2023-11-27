@@ -7,6 +7,57 @@ class Comporter extends DbConfig
     protected $idComporter;
     protected $idFacture;
     protected $idService;
+    protected $quantite;
+    protected $remise;
+    protected $total;
+
+    /**
+     * @return mixed
+     */
+    public function getQuantite()
+    {
+        return $this->quantite;
+    }
+
+    /**
+     * @param mixed $quantite
+     */
+    public function setQuantite($quantite): void
+    {
+        $this->quantite = $quantite;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRemise()
+    {
+        return $this->remise;
+    }
+
+    /**
+     * @param mixed $remise
+     */
+    public function setRemise($remise): void
+    {
+        $this->remise = $remise;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param mixed $total
+     */
+    public function setTotal($total): void
+    {
+        $this->total = $total;
+    }
 
     /**
      * @return mixed
@@ -50,15 +101,15 @@ class Comporter extends DbConfig
 
     public static function getAllComporterByFacture($idFacture)
     {
-        $stmt = "SELECT comporter.idComporter, comporter.idFacture, comporter.idService, 
-        f.numeroFacture, f.client, f.total, f.createdAt,
-        libelle, prix
+        $stmt = "SELECT comporter.idComporter, comporter.idFacture, comporter.idService, comporter.quantite, comporter.remise, comporter.total,
+        f.numeroFacture, f.client, f.createdAt, s.libelle, s.prix, c.nom, c.prenoms, r.pourcentage
         FROM comporter 
-        JOIN facture f join client c on c.idClient = f.client 
-        JOIN service s on s.idService = comporter.idService WHERE comporter.idFacture = ?";
+        INNER JOIN facture f join client c on c.idClient = f.client 
+        INNER JOIN service s on s.idService = comporter.idService 
+        INNER JOIN remise r on comporter.remise = r.idRemise
+        WHERE comporter.idFacture = ?";
 
         return self::getDb()->prepare($stmt, [$idFacture], get_called_class());
-
     }
 
     /**

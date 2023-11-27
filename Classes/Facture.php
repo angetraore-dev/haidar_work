@@ -8,12 +8,10 @@ class Facture extends DbConfig
     protected $idFacture;
     protected $numeroFacture;
     protected $client;
-    protected $total;
     protected $datemiseenplace;
     protected $typemiseenplace;
     protected $codesite;
     protected $createdAt;
-    protected $remise;
 
     /**
      * @return mixed
@@ -53,22 +51,6 @@ class Facture extends DbConfig
     public function setClient($client): void
     {
         $this->client = $client;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param mixed $total
-     */
-    public function setTotal($total): void
-    {
-        $this->total = $total;
     }
 
     /**
@@ -136,31 +118,15 @@ class Facture extends DbConfig
     }
 
     /**
-     * @return mixed
-     */
-    public function getRemise()
-    {
-        return $this->remise;
-    }
-
-    /**
-     * @param mixed $remise
-     */
-    public function setRemise($remise): void
-    {
-        $this->remise = $remise;
-    }
-
-    /**
      * @return array|false|mixed
      * Get All factures by Customers and designation on each Factures
      */
     public static function getAlldistinctfacture()
     {
-        $stmt = "SELECT facture.idFacture, facture.client, facture.createdAt, facture.codesite, facture.typemiseenplace, facture.datemiseenplace, facture.total, facture.numeroFacture, c.nom, c.prenoms, c.contact, 
-           r.pourcentage FROM facture 
-           INNER JOIN client c on c.idClient = facture.client 
-           INNER JOIN remise r on facture.remise = r.idRemise"
+        $stmt = "SELECT facture.idFacture, facture.client, facture.createdAt, facture.codesite, facture.typemiseenplace, facture.datemiseenplace, facture.numeroFacture, 
+            c.nom, c.prenoms, c.contact, c2.total FROM facture 
+           INNER JOIN client c on c.idClient = facture.client INNER JOIN comporter c2 on facture.idFacture = c2.idFacture
+            INNER JOIN service s on c2.idService = s.idService INNER JOIN remise r on c2.remise = r.idRemise"
         ;
 
         return DbConfig::getDb()->query($stmt, get_called_class());

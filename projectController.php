@@ -17,7 +17,6 @@ if (isset($_POST['createFacture'])){
         'idFacture' => null,
         'numeroFacture' => $datas->numFacture,
         'client' => $user_id,
-        'total' => null,
         'datemiseenplace' => $datas->datemiseenplace,
         'typemiseenplace' => $datas->typemiseenplace,
         'codesite' => $datas->codesite,

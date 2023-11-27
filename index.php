@@ -4,13 +4,14 @@ session_start();
     Classes\Autoloader::register();
     use Classes\Client;
     use Classes\Facture;
+use Classes\Remise;
 use Classes\Service;
 
 $allCustomers = Client::getAllClient();
 $facture = Facture::getAlldistinctfacture();
 $allService = Service::getAllService();
-var_dump($allService);
-
+$allRemise = Remise::getAllPourcentage();
+var_dump($allRemise);
 
 ?>
 <!DOCTYPE html>
@@ -51,7 +52,8 @@ var_dump($allService);
 </head>
 <body>
 <div class="container my-4">
-    <div class="col-sm-8  mx-auto">
+    <div class="col-sm-8  mx-auto" id="forfacture">
+
         <h3 class="h3 text-black fw-4 fs-3 my-4 text-left" id="create_facture"> Create a facture</h3>
 
         <form class="row g-3" name="form" id="form" role="form">
@@ -94,12 +96,13 @@ var_dump($allService);
                 <button type="button" id="createFacture" name="createFacture" class="btn btn-primary float-end">next</button>
             </div>
         </form>
+    </div>
 
-
+    <div class="col-sm-8 mx-auto border border-outline-warning" id="forcomporter">
         <h3 class="h3 text-primary fw-3 fs-3 my-4 text-center" id="add_service">Facture's Details</h3>
-        <form class="row-g3" name="addService" id="addService" role="form">
-            <div class="col-lg-12">
-                <div class="col-6">
+        <form class="form py-4 px-2" name="addService" id="addService">
+            <div class="row g-3">
+                <div class="col">
                     <label for="idService" class="form-label">Designation</label>
                     <select name="idService" id="idService" class="form-select">
                         <?php for ($i =0; $i < count($allService); $i++) : ?>
@@ -108,20 +111,27 @@ var_dump($allService);
 
                     </select>
                 </div>
-                <div class="col-6">
+
+                <div class="col">
                     <label for="prix" class="form-label">Prix</label>
                     <input class="form-control" type="text" name="prix" id="prix" value="" readonly="readonly" />
                 </div>
-
             </div>
 
-            <div class="col-12">
-                <div class="col-6">
+
+            <div class="row g-3">
+                <div class="col">
                     <label for="remise" class="form-label">Remise</label>
-                    <input class="form-control" readonly="readonly">
+                    <select name="remise" id="remise" class="form-select">
+                        <option value="0" selected="selected">CHOOSE A REMISE OR NOT ?</option>
+
+                        <?php for ($y =0; $y < count($allRemise); $y++) : ?>
+                            <option class="form-control" value="<?php echo $allRemise[$y]['idRemise'] .'-'.$allRemise[$y]['pourcentage']; ?>"> <?php echo $allRemise[$y]['pourcentage']; ?>%</option>
+                        <?php endfor;?>
+                    </select>
                 </div>
 
-                <div class="col-6">
+                <div class="col">
                     <label for="quantity" class="form-label">Quantite</label>
                     <div class="input-group">
                     <span class="input-group-btn">
@@ -129,7 +139,7 @@ var_dump($allService);
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
                     </span>
-                 <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" readonly="readonly" />
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="" min="1" max="100" readonly="readonly" />
                         <span class="input-group-btn">
                         <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
                             <span class="glyphicon glyphicon-plus"></span>
@@ -139,19 +149,21 @@ var_dump($allService);
                 </div>
             </div>
 
-            <div class="col-6">
-                <input class="form-control col-2" type="text" name="idFacture" id="idFacture" value="" readonly="readonly" hidden="hidden" />
+           <div class="row g-3 p-4">
+               <div class="col">
+                   <input class="form-control" type="hidden" name="idFacture" id="idFacture" value="" readonly="readonly" />
 
-            </div>
+               </div>
+               <div class="col">
+                   <label for="total" class="form-label fw-6 text-back">Montant TOTAL en FCFA *</label><br>
+                   <label for="sub" class="form-label">Remise for one qte</label> <p class="text-muted" id="sub"></p>
+                   <input class="form-control" type="text" name="total" id="total" value="" readonly="readonly">
 
-            <div class="col-6">
-                <label for="total" class="form-label fw-6 text-back">Montant en FCFA * </label>
-                <input class="form-control col-4" type="text" name="total" id="total" readonly="readonly">
+               </div>
+           </div>
 
-            </div>
-
-            <div class="col-12">
-                <button class="btn btn-primary bg-dark text-white" type="button" name="ajouter" id="ajouter">Ajouter a la facture</button>
+            <div class="col-12 my-4">
+                <button class="btn btn-primary bg-dark text-white float-end" type="button" name="ajouter" id="ajouter">Ajouter a la facture</button>
             </div>
         </form>
 

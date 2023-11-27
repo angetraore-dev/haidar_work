@@ -3,8 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 $(document).ready(function(){
-    $('#add_service').fadeOut();
-    $('#addService').fadeOut();
+    //$('#add_service').fadeOut();
+    //$('#addService').fadeOut();
+    $('#forcomporter').hide();
 
     $('#user').keyup(function(){
 
@@ -64,12 +65,14 @@ $(document).ready(function(){
             success:function(data)
 
             {
-                $('#create_facture').fadeOut();
-                $('#form').fadeOut();
+                $('#forfacture').hide();
+                //$('#create_facture').fadeOut();
+                //$('#form').fadeOut();
 
                 //$('#datasenttocontroller').html(data);
-                $('#add_service').fadeIn();
-                $('#addService').fadeIn();
+                //$('#add_service').fadeIn();
+                //$('#addService').fadeIn();
+                $('#forcomporter').show();
                 $('#idFacture').val(data);
 
             }
@@ -90,30 +93,37 @@ $(document).ready(function(){
             success:function (data) {
 
                 $('#prix').val(data);
+                $('#quantity').val(1);
 
-                let qte = parseInt($('#quantity').val());
-
-                $('#total').val(prix * 1);
+                $('#total').val($('#prix').val() * $('#quantity').val());
 
             }
         })
 
     });
 
+    $("#remise").on('change', function (){
+        let remise = (this).value.split('-');
+        let prixOne = $('#prix').val();
+        if (remise[1] != undefined && prixOne != "" ){
+            let oneremise = (remise[1] * prixOne) / 100;
+            $("#sub").html(oneremise);
+        }
+    })
 
-    var quantitiy=1;
-    $('#total').val(prix * 1);
     $('.quantity-right-plus').click(function(e){
 
         // Stop acting like a button
         e.preventDefault();
-        // Get the field name
-        var quantity = parseInt($('#quantity').val());
+
+        let quantity = parseInt($('#quantity').val());
+        let newOne = quantity + 1;
 
         // If is not undefined
+        $('#quantity').val( newOne );
 
-        $('#quantity').val(quantity + 1);
 
+        $('#total').val( $('#prix').val() * newOne );
 
         // Increment
 
@@ -129,15 +139,11 @@ $(document).ready(function(){
 
         // Increment
         if(quantity>1){
-            $('#quantity').val(quantity - 1);
+            var newOne = quantity - 1 ;
+            $('#quantity').val(newOne);
+            $('#total').val($('#prix').val() * quantity);
         }
-    });
 
-    $('#quantity').on('change', function (){
-       let prix = parseInt($('#prix').val());
-       let qte = parseInt($('#quantity').val());
-
-       $('#total').val(prix * qte);
     });
 
 

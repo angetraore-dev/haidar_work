@@ -31,5 +31,10 @@ class Remise extends Database
         $this->pourcentage = $pourcentage;
     }
 
+    public static function getAllPourcentage()
+    {
+        return DbConfig::getDb()->query("SELECT * FROM remise ORDER BY pourcentage DESC ", get_called_class());
+    }
+
 
 }

@@ -6,6 +6,7 @@ $(document).ready(function(){
     //$('#add_service').fadeOut();
     //$('#addService').fadeOut();
     $('#forcomporter').hide();
+    $('.amountremisesub').fadeOut();
 
     $('#user').keyup(function(){
 
@@ -103,13 +104,38 @@ $(document).ready(function(){
     });
 
     $("#remise").on('change', function (){
-        let remise = (this).value.split('-');
-        let prixOne = $('#prix').val();
-        if (remise[1] != undefined && prixOne != "" ){
-            let oneremise = (remise[1] * prixOne) / 100;
-            $("#sub").html(oneremise);
+        let checkRemise = (this).value;
+        if (checkRemise != 0 || checkRemise != "0"){
+
+            $('.amountremisesub').fadeIn();
+
+            let PercentRemise = checkRemise.split('-');
+
+            //let total = $('#total').val();
+            let total = $('#prix').val() * parseInt($('#quantity').val());
+
+            //Amount to Substract to Total
+            //let AmountRemise = (PercentRemise[1] * total) / 100;
+
+            let AmountRemise = (PercentRemise[1] * total) / 100 ;
+
+            //Amount to Substract to Total displayed in p
+            $("#sub").html(AmountRemise);
+
+            //Update Total
+            $('#total').val( total - AmountRemise);
+
+        } else if ( checkRemise === "0" ){
+            $('.amountremisesub').fadeOut();
+            let total = $('#prix').val() * parseInt($('#quantity').val());
+
+            //Update Total
+            $('#total').val( total);
+
         }
-    })
+
+
+    });
 
     $('.quantity-right-plus').click(function(e){
 
@@ -130,8 +156,10 @@ $(document).ready(function(){
     });
 
     $('.quantity-left-minus').click(function(e){
+
         // Stop acting like a button
         e.preventDefault();
+
         // Get the field name
         var quantity = parseInt($('#quantity').val());
 
@@ -139,19 +167,27 @@ $(document).ready(function(){
 
         // Increment
         if(quantity>1){
+
             var newOne = quantity - 1 ;
+
             $('#quantity').val(newOne);
-            $('#total').val($('#prix').val() * quantity);
+
+            $('#total').val($('#prix').val() * newOne);
         }
 
     });
 
 
-    $('#ajouter').on('click', function (){
-        let formData = new FormData(document.querySelector("#addService"));
-        var object = {};
-        formData.forEach((value, key) => object[key] = value);
-        var json = JSON.stringify(object);
+    $("#ajouter").on('click', function (){
+
+        let form = document.querySelector("#addService");
+
+        let formData = new FormData(form);
+        let obj = {};
+
+        formData.forEach((value, key) => obj[key] = value);
+
+        let jsonD = JSON.stringify(obj);
 
         $.ajax({
 
@@ -159,23 +195,30 @@ $(document).ready(function(){
 
             method:"POST",
 
-            data:{addDesignation:json},
+            data:{addDesignation:jsonD},
 
             success:function(data)
 
             {
-                $('#create_facture').fadeOut();
-                $('#form').fadeOut();
 
-                //$('#datasenttocontroller').html(data);
-                $('#add_service').fadeIn();
-                $('#addService').fadeIn();
-                $('#idFacture').val(data);
+                //$('#forfacture').fadeOut();
+                //$('#create_facture').fadeOut();
+                //$('#form').fadeOut();
+
+                //$('#add_service').fadeIn();
+                //$('#addService').fadeIn();
+                //$('#idFacture').val(data);
+                console.log(data);
+
+                //disponible pour un eventual echo depiuis le controller
+                //$('#retourderequest').html(data);
+
 
             }
 
         });
-    })
+
+    });
 
 
 });

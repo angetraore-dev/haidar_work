@@ -29,7 +29,7 @@ class DbConfig extends Database
     public static function notFound(){
         header("HTTP/1.0 404 Not Found");
         //$p = 'deconnexion';
-        echo "<script></script><meta http-equiv='Refresh' CONTENT='0;URL=index.php?p=404'>";
+        echo "<script></script><meta http-equiv='Refresh' CONTENT='0;URL=index.php'>";
     }
 
     /**

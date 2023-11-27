@@ -1,9 +1,9 @@
 <?php
 session_start();
-    require 'Classes/Autoloader.php';
-    Classes\Autoloader::register();
-    use Classes\Client;
-    use Classes\Facture;
+require 'Classes/Autoloader.php';
+Classes\Autoloader::register();
+use Classes\Client;
+use Classes\Facture;
 use Classes\Remise;
 use Classes\Service;
 
@@ -11,7 +11,6 @@ $allCustomers = Client::getAllClient();
 $facture = Facture::getAlldistinctfacture();
 $allService = Service::getAllService();
 $allRemise = Remise::getAllPourcentage();
-var_dump($allRemise);
 
 ?>
 <!DOCTYPE html>
@@ -21,6 +20,7 @@ var_dump($allRemise);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="angetraore-dev">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="assets/css/style.css" rel="stylesheet">
     <title> OOP PHP CODE Haidar Project</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!--
@@ -52,6 +52,7 @@ var_dump($allRemise);
 </head>
 <body>
 <div class="container my-4">
+
     <div class="col-sm-8  mx-auto" id="forfacture">
 
         <h3 class="h3 text-black fw-4 fs-3 my-4 text-left" id="create_facture"> Create a facture</h3>
@@ -66,7 +67,7 @@ var_dump($allRemise);
 
             </div>
             <div class="col-6">
-                <label for="datemise" class="form-label">Date de mise en place</label>
+                <label for="datemiseenplace" class="form-label">Date de mise en place</label>
                 <input type="date" class="form-control" id="datemiseenplace" name="datemiseenplace" />
             </div>
 
@@ -83,7 +84,7 @@ var_dump($allRemise);
             </div>
 
             <div class="col-6">
-                <label for="typemise" class="form-label">Type de mise en place</label>
+                <label for="typemiseenplace" class="form-label">Type de mise en place</label>
                 <input type="text" class="form-control" name="typemiseenplace" id="typemiseenplace" />
             </div>
             <div class="col-md-6">
@@ -99,8 +100,12 @@ var_dump($allRemise);
     </div>
 
     <div class="col-sm-8 mx-auto border border-outline-warning" id="forcomporter">
+
         <h3 class="h3 text-primary fw-3 fs-3 my-4 text-center" id="add_service">Facture's Details</h3>
-        <form class="form py-4 px-2" name="addService" id="addService">
+
+        <!-- Form name addService -->
+        <form class="form py-4 px-2" name="addService" id="addService" role="form">
+
             <div class="row g-3">
                 <div class="col">
                     <label for="idService" class="form-label">Designation</label>
@@ -119,7 +124,25 @@ var_dump($allRemise);
             </div>
 
 
-            <div class="row g-3">
+            <div class="row g-3 py-4">
+
+                <div class="col-8">
+
+                    <label for="quantity" class="form-label">Quantite</label>
+
+                    <div class="qte-div">
+
+                        <button type="button" class="quantity-left-minus" data-type="minus" data-field=""> - </button>
+
+                        <input type="number" class="" name="quantity" id="quantity" value="" min="1" max="100" readonly />
+
+                        <button type="button" class="quantity-right-plus" data-type="plus" data-field="">+</button>
+
+                    </div>
+
+                </div>
+
+
                 <div class="col">
                     <label for="remise" class="form-label">Remise</label>
                     <select name="remise" id="remise" class="form-select">
@@ -131,32 +154,23 @@ var_dump($allRemise);
                     </select>
                 </div>
 
-                <div class="col">
-                    <label for="quantity" class="form-label">Quantite</label>
-                    <div class="input-group">
-                    <span class="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-                    </span>
-                        <input type="number" id="quantity" name="quantity" class="form-control" value="" min="1" max="100" readonly="readonly" />
-                        <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                    </span>
-                    </div>
-                </div>
             </div>
 
+            <!-- idFacture to repeat insertion in same facture -->
            <div class="row g-3 p-4">
                <div class="col">
-                   <input class="form-control" type="hidden" name="idFacture" id="idFacture" value="" readonly="readonly" />
+                   <label for="idFacture" class="form-label">Facture numero:</label>
+                   <input class="form-control" type="text" name="idFacture" id="idFacture" value="" readonly="readonly" />
 
                </div>
-               <div class="col">
+               <div class="col amountremise">
                    <label for="total" class="form-label fw-6 text-back">Montant TOTAL en FCFA *</label><br>
-                   <label for="sub" class="form-label">Remise for one qte</label> <p class="text-muted" id="sub"></p>
+
+                   <div class="amountremisesub">
+
+                       <label for="sub" class="form-label text-muted"><small>Remise Amount:</small></label>
+                       <span><p class="text-muted" id="sub"></p> FCFA</span>
+                   </div>
                    <input class="form-control" type="text" name="total" id="total" value="" readonly="readonly">
 
                </div>
@@ -165,8 +179,25 @@ var_dump($allRemise);
             <div class="col-12 my-4">
                 <button class="btn btn-primary bg-dark text-white float-end" type="button" name="ajouter" id="ajouter">Ajouter a la facture</button>
             </div>
+
         </form>
 
+        <!--<label for="quantity" class="form-label">Quantite</label>
+      <div class="input-group">
+      <span class="input-group-btn">
+          <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+              <span class="glyphicon glyphicon-minus"></span>
+          </button>
+      </span>
+          <input type="number" id="quantity" name="quantity" class="form-control" value="" min="1" max="100" readonly="readonly" />
+          <span class="input-group-btn">
+          <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+              <span class="glyphicon glyphicon-plus"></span>
+          </button>
+      </span>
+      </div>-->
+<!--for detail facture -->
+        <div id="retourderequest"></div>
     </div>
 </div>
 

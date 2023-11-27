@@ -47,6 +47,7 @@ echo $price->getPrix();
 
 if (isset($_POST['addDesignation'])){
     $datas = json_decode($_POST['addDesignation']);
-    print_r($datas, true);
-    die();
+    echo print_r($datas, true);
+    echo "<br><hr/>";
+    //die();
 }

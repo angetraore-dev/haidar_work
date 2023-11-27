@@ -10,7 +10,7 @@ if(isset($_POST["query"])){
 
     $result = mysqli_query($connect, $query);
 
-    $output = '<ul class="list-unstyled">';
+    $output = '<ul class="list-unstyled overflow-scroll">';
 
 
 

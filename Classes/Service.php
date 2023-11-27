@@ -59,4 +59,10 @@ class Service extends DbConfig
         return self::getDb()->query($stmt, get_called_class());
     }
 
+    public static function findPrice($id)
+    {
+        $sql = "SELECT prix FROM service where idService = ?";
+        return DbConfig::getDb()->prepare($sql,[$id], get_called_class(), true);
+    }
+
 }

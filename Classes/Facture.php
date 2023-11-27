@@ -1,6 +1,7 @@
 <?php
 
 namespace Classes;
+use Classes\DbConfig;
 
 class Facture extends DbConfig
 {
@@ -8,7 +9,11 @@ class Facture extends DbConfig
     protected $numeroFacture;
     protected $client;
     protected $total;
+    protected $datemiseenplace;
+    protected $typemiseenplace;
+    protected $codesite;
     protected $createdAt;
+    protected $remise;
 
     /**
      * @return mixed
@@ -69,6 +74,54 @@ class Facture extends DbConfig
     /**
      * @return mixed
      */
+    public function getDatemiseenplace()
+    {
+        return $this->datemiseenplace;
+    }
+
+    /**
+     * @param mixed $datemiseenplace
+     */
+    public function setDatemiseenplace($datemiseenplace): void
+    {
+        $this->datemiseenplace = $datemiseenplace;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTypemiseenplace()
+    {
+        return $this->typemiseenplace;
+    }
+
+    /**
+     * @param mixed $typemiseenplace
+     */
+    public function setTypemiseenplace($typemiseenplace): void
+    {
+        $this->typemiseenplace = $typemiseenplace;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCodesite()
+    {
+        return $this->codesite;
+    }
+
+    /**
+     * @param mixed $codesite
+     */
+    public function setCodesite($codesite): void
+    {
+        $this->codesite = $codesite;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -83,30 +136,43 @@ class Facture extends DbConfig
     }
 
     /**
+     * @return mixed
+     */
+    public function getRemise()
+    {
+        return $this->remise;
+    }
+
+    /**
+     * @param mixed $remise
+     */
+    public function setRemise($remise): void
+    {
+        $this->remise = $remise;
+    }
+
+    /**
      * @return array|false|mixed
      * Get All factures by Customers and designation on each Factures
      */
     public static function getAlldistinctfacture()
     {
-        $stmt = "SELECT *  FROM facture 
-            JOIN client c on c.idClient = facture.client
-            JOIN comporter c2 on facture.idFacture = c2.idFacture
-            JOIN service s on s.idService = c2.idService
-            order by createdAt DESC "
+        $stmt = "SELECT facture.idFacture, facture.client, facture.createdAt, facture.codesite, facture.typemiseenplace, facture.datemiseenplace, facture.total, facture.numeroFacture, c.nom, c.prenoms, c.contact, 
+           r.pourcentage FROM facture 
+           INNER JOIN client c on c.idClient = facture.client 
+           INNER JOIN remise r on facture.remise = r.idRemise"
         ;
 
-        return self::getDb()->query($stmt, get_called_class());
+        return DbConfig::getDb()->query($stmt, get_called_class());
     }
 
-    public static function CreateFacture($fields)
+    public function newFacture($fields)
     {
-
         $implodeColumns = implode(', ', array_keys($fields));
         $implodePlaceholders = implode(', :', array_keys($fields));
-
         $request = "INSERT INTO facture($implodeColumns) VALUES (:". $implodePlaceholders .")";
 
-        $stmt = self::getDb()->prepare($request, $fields,get_called_class());
+        $stmt = $this->getPDO()->prepare($request);
 
         foreach ( $fields as $key => $value ){
             $stmt->bindValue(':'.$key, $value);
@@ -115,7 +181,6 @@ class Facture extends DbConfig
         $stmtExec = $stmt->execute();
 
         return $stmtExec;
-
     }
 
 

@@ -58,6 +58,7 @@ if (isset($_POST['addDesignation'])){
      */
     //Cest l affichage
     //echo $datas->idService;
+    $output = '';
     $datas = json_decode($_POST['addDesignation']);
 
     if (empty($datas->remise)){
@@ -70,8 +71,6 @@ if (isset($_POST['addDesignation'])){
 
         $rr = $remiseValue[0];
     }
-
-
 
     $fields = [
       'idComporter' => null,
@@ -89,11 +88,40 @@ if (isset($_POST['addDesignation'])){
 
         $lastInsertIdComporter = $detail->LastInsertId();
 
-        //Get all insertion by facture
+        $alldetailsInserted = $detail->allComporterbyFactureObject($datas->idFacture);
 
-        $alldetailsInserted = Comporter::getAllComporterByFacture($datas->idFacture);
+        echo '
+            <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Designation</th>
+              <th scope="col">Qte</th>
+              <th scope="col">Prix</th>
+              <th scope="col">Remise</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>';
 
-        echo print_r($alldetailsInserted, true);
+                for ($i =0; $i < count($alldetailsInserted); $i++) :?>
+
+                    <tr>
+                        <th scope="row"><?php echo $i+1 ;?></th>
+                        <td><?php echo $alldetailsInserted[$i]->libelle; ?></td>
+                        <td><?php echo $alldetailsInserted[$i]->quantite; ?></td>
+                        <td><?php echo $alldetailsInserted[$i]->prix; ?></td>
+                        <td><?php if ($alldetailsInserted[$i]->pourcentage != 1){
+                            echo $alldetailsInserted[$i]->pourcentage .'%';
+                            }?></td>
+                        <td><?php echo $alldetailsInserted[$i]->total; ?></td>
+                    </tr>
+
+                <?php endfor;
+
+         echo '</tbody></table>';
+
+
     }
 
 

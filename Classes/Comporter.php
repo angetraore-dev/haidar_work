@@ -121,21 +121,26 @@ class Comporter extends DbConfig
 
     }
 
-    /**
-     * @param $idFacture
-     * @return array|false|mixed
-     * Return All Details by Facture
-     */
-    public static function allComporterByFacture($idFacture){
+    public function allComporterbyFactureObject($idFacture){
         $sql = "
             SELECT comporter.idComporter, comporter.idFacture, s.libelle, s.prix, r.pourcentage, comporter.quantite, comporter.total FROM comporter 
                 INNER JOIN service s on s.idService = comporter.idService 
                 INNER JOIN remise r on r.idRemise = comporter.remise 
-            WHERE idFacture = ? 
+            WHERE idFacture = :idFacture 
         ";
 
-        return DbConfig::getDb(PDO::FETCH_OBJ)->prepare($sql, [$idFacture], get_called_class());
+        $stmt = $this->getPDO()->prepare($sql);
+        $stmt->bindValue(':idFacture', $idFacture, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, self::class);
 
+
+        if ($stmt->execute()){
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        }
+
+        return false;
     }
 
 

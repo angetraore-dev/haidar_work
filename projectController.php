@@ -133,6 +133,63 @@ if (isset($_POST['addDesignation'])){
 }
 
 if (isset($_POST['savedFacture'])){
+
     $idFacture = $_POST['savedFacture'];
+    $theFacture = Facture::oneFactureAndDetail($idFacture);
+
+    var_dump($theFacture);
+
+    /*clientName createdAtDate numFac miseenplaceDate
+     * protected 'idFacture' => int 61
+      protected 'numeroFacture' => string 'facture#BACKEND' (length=15)
+      protected 'client' => int 3
+      protected 'datemiseenplace' => string '2023-11-25' (length=10)
+      protected 'typemiseenplace' => string 'ESPIONNAGE' (length=10)
+      protected 'codesite' => string 'PLATEAU' (length=7)
+      protected 'createdAt' => string '2023-11-28' (length=10)
+     echo '<div class="row g-3 my-4 p-2">';
+     foreach ($theFacture as $value): ?>
+         <div class="col"> <?php echo $value->getNumeroFacture() .'<br>';?></div>
+         <div class="col"> <?php echo 'nom & prenoms:' . $theFacture[0]->nom .' '. $theFacture[0]->prenoms .'<br>'; ?></div>
+     <div class="col"><?php echo 'Date de la facture :' . $value->getCreatedAt() .'<br>'; ?></div>
+     <div class="col"><?php echo 'Date de mise en place:' . $value->getDatemiseenplace() .' <br>' ; ?></div>
+
+     <?php endforeach;
+
+     echo '</div>';
+     */
+
+
+    echo '
+            <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Designation</th>
+              <th scope="col">Qte</th>
+              <th scope="col">Prix</th>
+              <th scope="col">Remise</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>';
+
+    for ($i =0; $i < count($theFacture); $i++) :?>
+
+        <tr>
+            <th scope="row"><?php echo $i+1 ;?></th>
+            <td><?php echo $theFacture[$i]->libelle; ?></td>
+            <td><?php echo $theFacture[$i]->quantite; ?></td>
+            <td><?php echo $theFacture[$i]->prix; ?></td>
+            <td><?php if ($theFacture[$i]->pourcentage != 1){
+                    echo $theFacture[$i]->pourcentage .'%';
+                }?></td>
+            <td><?php echo $theFacture[$i]->total; ?></td>
+        </tr>
+
+    <?php endfor;
+
+    echo '</tbody></table>';
+
 
 }

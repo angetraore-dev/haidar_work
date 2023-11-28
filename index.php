@@ -204,6 +204,9 @@ $allRemise = Remise::getAllPourcentage();
     </div>
 
     <div class="col-sm-8 mx-auto border-2 border-success p-4" id="displayFacture">
+
+        <h3 class="h3 text-success my-4 text-center"> Affichage de la facture</h3>
+
         <div class="row theFacture">
 
         </div>

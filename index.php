@@ -179,7 +179,8 @@ $allRemise = Remise::getAllPourcentage();
            </div>
 
             <div class="col-12 my-4">
-                <button class="btn btn-primary bg-dark text-white float-end" type="button" name="ajouter" id="ajouter">Ajouter a la facture</button>
+                <button class="btn btn-primary bg-dark text-white float-start" type="button" name="ajouter" id="ajouter">Ajouter a la facture</button>
+                <button class="btn btn-outline-success text-black float-end" type="button" name="save" id="save">Save & close</button>
             </div>
 
         </form>
@@ -200,6 +201,12 @@ $allRemise = Remise::getAllPourcentage();
       </div>-->
 <!--for detail facture -->
         <div id="retourderequest"></div>
+    </div>
+
+    <div class="col-sm-8 mx-auto border-2 border-success p-4" id="displayFacture">
+        <div class="row theFacture">
+
+        </div>
     </div>
 </div>
 

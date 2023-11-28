@@ -132,6 +132,20 @@ class Facture extends DbConfig
         return DbConfig::getDb()->query($stmt, get_called_class());
     }
 
+    public static function oneFactureAndDetail($idFacture)
+    {
+        $stmt = "SELECT facture.idFacture, facture.client, facture.createdAt, facture.codesite, facture.typemiseenplace, facture.datemiseenplace, facture.numeroFacture, 
+            c.nom, c.prenoms, c.contact, c2.idComporter, c2.quantite, c2.total, r.pourcentage FROM facture 
+           INNER JOIN client c on c.idClient = facture.client 
+           INNER JOIN comporter c2 on facture.idFacture = c2.idFacture
+           INNER JOIN service s on c2.idService = s.idService INNER JOIN remise r on c2.remise = r.idRemise
+           WHERE facture.idFacture = ?
+            "
+        ;
+
+        return DbConfig::getDb()->prepare($stmt, [$idFacture], __CLASS__, true);
+    }
+
     public function newFacture($fields)
     {
         $implodeColumns = implode(', ', array_keys($fields));

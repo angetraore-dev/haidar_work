@@ -7,6 +7,7 @@ $(document).ready(function(){
     //$('#addService').fadeOut();
     $('#forcomporter').hide();
     $('.amountremisesub').fadeOut();
+    $('#displayFacture').fadeOut();
 
     $('#user').keyup(function(){
 
@@ -104,7 +105,9 @@ $(document).ready(function(){
     });
 
     $("#remise").on('change', function (){
+
         let checkRemise = (this).value;
+
         if (checkRemise != 0 || checkRemise != "0"){
 
             $('.amountremisesub').fadeIn();
@@ -222,6 +225,44 @@ $(document).ready(function(){
         });
 
     });
+
+    $('#save').on('click', function (e) {
+
+        e.preventDefault();
+
+        let idFacture = $('#saveValue').val();
+
+        $.ajax({
+
+            url:"projectController.php",
+
+            method:"POST",
+
+            data:{savedFacture:idFacture},
+
+            success:function(data)
+            {
+                $('#forfacture').fadeOut();
+
+                $('#forcomporter').fadeOut();
+
+
+                $('#displayFacture').fadeIn();
+
+                //Must sent ID Facture to get all Data for One Facture
+                $('.theFacture').html(data);
+            }
+
+
+
+        });
+
+
+
+
+
+
+    })
 
 
 });

@@ -61,6 +61,11 @@ if (isset($_POST['addDesignation'])){
     $output = '';
     $datas = json_decode($_POST['addDesignation']);
 
+    ?>
+    <input type="hidden" id="saveValue" name="saveValue" value="<?php echo $datas->idFacture ; ?>" readonly>
+
+    <?php
+
     if (empty($datas->remise)){
 
         $rr = 1;
@@ -125,7 +130,9 @@ if (isset($_POST['addDesignation'])){
     }
 
 
+}
 
-
+if (isset($_POST['savedFacture'])){
+    $idFacture = $_POST['savedFacture'];
 
 }

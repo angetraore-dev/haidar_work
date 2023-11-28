@@ -1,6 +1,8 @@
 <?php
 require 'Classes/Autoloader.php';
 Classes\Autoloader::register();
+
+use Classes\Comporter;
 use Classes\Database;
 use Classes\DbConfig;
 use Classes\Facture;
@@ -46,8 +48,56 @@ echo $price->getPrix();
 }
 
 if (isset($_POST['addDesignation'])){
+    /*
+     * [idService] => 1
+    [prix] => 100000 //n 'est pas a inserer
+    [quantity] => 7
+    [remise] => 2-10
+    [idFacture] => 46
+    [total] => 630000
+     */
+    //Cest l affichage
+    //echo $datas->idService;
     $datas = json_decode($_POST['addDesignation']);
-    echo print_r($datas, true);
-    echo "<br><hr/>";
-    //die();
+
+    if (empty($datas->remise)){
+
+        $rr = 1;
+
+    }else{
+
+        $remiseValue = explode("-", $datas->remise);
+
+        $rr = $remiseValue[0];
+    }
+
+
+
+    $fields = [
+      'idComporter' => null,
+      'idFacture' => $datas->idFacture,
+      'idService' => $datas->idService,
+      'quantite' => $datas->quantity,
+      'remise' => $rr,
+      'total' => $datas->total
+    ];
+
+    $detail = new Comporter();
+    $bind = $detail->create($fields);
+
+    if ($bind){
+
+        $lastInsertIdComporter = $detail->LastInsertId();
+
+        //Get all insertion by facture
+
+        $alldetailsInserted = Comporter::getAllComporterByFacture($datas->idFacture);
+
+        echo print_r($alldetailsInserted, true);
+    }
+
+
+
+
+
 }

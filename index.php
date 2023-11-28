@@ -149,7 +149,9 @@ $allRemise = Remise::getAllPourcentage();
                         <option value="0" selected="selected">CHOOSE A REMISE OR NOT ?</option>
 
                         <?php for ($y =0; $y < count($allRemise); $y++) : ?>
-                            <option class="form-control" value="<?php echo $allRemise[$y]['idRemise'] .'-'.$allRemise[$y]['pourcentage']; ?>"> <?php echo $allRemise[$y]['pourcentage']; ?>%</option>
+                            <?php if ($allRemise[$y]['idRemise'] != 1) : ?>
+                                <option class="form-control" value="<?php echo $allRemise[$y]['idRemise'] .'-'.$allRemise[$y]['pourcentage']; ?>"> <?php echo $allRemise[$y]['pourcentage']; ?>%</option>
+                            <?php endif; ?>
                         <?php endfor;?>
                     </select>
                 </div>

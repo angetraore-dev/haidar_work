@@ -178,7 +178,9 @@ $(document).ready(function(){
     });
 
 
-    $("#ajouter").on('click', function (){
+    $("#ajouter").on('click', function (e){
+
+        e.preventDefault();
 
         let form = document.querySelector("#addService");
 
@@ -208,10 +210,11 @@ $(document).ready(function(){
                 //$('#add_service').fadeIn();
                 //$('#addService').fadeIn();
                 //$('#idFacture').val(data);
-                console.log(data);
+
 
                 //disponible pour un eventual echo depiuis le controller
-                //$('#retourderequest').html(data);
+
+                $('#retourderequest').html(data);
 
 
             }
